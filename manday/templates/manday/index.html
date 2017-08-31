@@ -61,7 +61,7 @@
                         <td align="center">  {{ md|floatformat:1 }}  </td>
                     {% endfor %}
                     <td align="right" bgcolor="#8fbc8f">{{ records|get_total:person.p_name|floatformat:1 }}</td>
-                    <td align="center"><a href="{% url 'manday:manday_add' person.id %}">新增</a></td>
+                    <td align="center"><a href="{% url 'manday:add_hours' person.id %}">新增</a></td>
                 </tr>
             {% endfor %}
         {% endif %}

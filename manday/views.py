@@ -63,7 +63,7 @@ def person_detail(request, person_id):
     return render(request, 'manday/persondetail.html', {"recorder_list": list})
 
 
-def manday_add(request, person_id):
+def add_hours(request, person_id):
     if request.method in ["POST"]:
         project_id = int(request.POST.get("project_id", ""))
         hours = float(request.POST.get("hours", ""))
@@ -78,14 +78,24 @@ def manday_add(request, person_id):
         return HttpResponseRedirect(reverse('manday:index'))
     else:
         projects = Project.objects.all()
-        return render(request, 'manday/add.html', {"projects": projects})
+        return render(request, 'manday/add_hours.html', {"projects": projects, "person_id": person_id})
 
 
-def manday_delete(request, manday_id):
+def delete_hours(request, manday_id):
     # get_object_or_404(WorkRecord, person_id=person_id)
     item = get_object_or_404(WorkRecord, id=manday_id)
     item.delete()
     return HttpResponseRedirect(reverse('manday:person_detail', args=(item.person.id,)))
+
+
+def add_project_from_person(request, person_id):
+    if request.method in ["POST"]:
+        project_name = request.POST.get("project_name", "")
+        add_date = str_to_date(request.POST.get("add_date", ""))
+        p = Project.objects.create(p_name=project_name, p_launch_date=add_date)
+        return HttpResponseRedirect(reverse('manday:add_hours', args=(person_id,)))
+    else:
+        return render(request, 'manday/add_project.html')
 
 
 @register.simple_tag

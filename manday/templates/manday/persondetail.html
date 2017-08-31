@@ -24,7 +24,7 @@
                 <td>{{ item.p_hours }}</td>
                 <td>{{ item.p_work_date|get_local_date }}</td>
                 <td>{{ item.p_add_time|get_local_datetime }}</td>
-                <td><a href="{% url 'manday:manday_delete' item.id %}">删除</a></td>
+                <td><a href="{% url 'manday:delete_hours' item.id %}">删除</a></td>
             </tr>
         {% endfor %}
     {% endif %}

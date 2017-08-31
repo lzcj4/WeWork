@@ -23,28 +23,31 @@
         <form method="post">
             {% csrf_token %}
             <div class="div_input">
-                <label>项目名：</label>
+                <label style="min-width: 80px">项目名：</label>
                 <select name="project_id">
                     <option selected>- - - - - - - -</option>
                     {% for p in projects %}
                         <option value={{ p.id }}>{{ p }}</option>
                     {% endfor %}
                 </select>
+                <a class="related-widget-wrapper-link add-related" id="add_id_project"
+                   href="{% url 'manday:add_project_from_person' person_id%}"
+                   title="Add another project"><img src="/static/admin/img/icon-addlink.svg" alt="Add"></a>
             </div>
 
             <div class="div_input">
-                <label>时长：</label>
+                <label style="min-width: 80px">时长：</label>
                 <input type="number" name="hours" value="8" style="color: red; "/>
                 <label>小时</label>
             </div>
 
             <div class="div_input">
-                <label>工作日：</label>
+                <label style="min-width: 80px">工作日：</label>
                 <input name="p_work_date" type="text" class="vDateField" size="10" required="" id="p_work_date">
             </div>
 
             <div>
-                <label>录入日期：</label>
+                <label style="min-width: 80px">录入日期：</label>
                 <input name="p_input_date" type="text" class="vDateField" size="10" required="" id="p_input_date">
                 <label style="margin-left: 20px">时间：</label>
                 <input name="p_input_time" type="text" class="vTimeField" size="10" required="" id="p_input_time">

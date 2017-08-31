@@ -1,0 +1,42 @@
+{% extends "manday/base.html" %}
+{% block header %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "manday/css/div_style.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/base.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
+
+    <script type="text/javascript" src="{% static "manday/js/get_func.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/vendor/jquery/jquery.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/jquery.init.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/core.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/calendar.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/admin/DateTimeShortcuts.js" %}"></script>
+
+{% endblock header %}
+
+{% block content %}
+    <div style="margin-left: 50px">
+        <div style="background: #79aec8;margin-bottom: 20px">
+            <label style="color: #fff;font-size: 20px">加入新项目</label>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="div_input">
+                <label>项目名：</label>
+                <input name="project_name"/>
+            </div>
+
+            <div class="div_input">
+                <label>启动日期：</label>
+                <input name="add_date" type="text" class="vDateField" size="10" required="" id="add_date">
+            </div>
+
+            <div>
+                <input type="submit" value="保存"/>
+            </div>
+
+        </form>
+
+    </div>
+{% endblock content %}

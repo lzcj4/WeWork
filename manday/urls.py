@@ -20,6 +20,7 @@ app_name = "manday"
 urlpatterns = [
     url(r'^$', views.index, name="index"),
     url(r'^(?P<pk>[0-9]+)/$', views.PersonDetail.as_view(), name='person_detail'),
-    url(r'^(?P<person_id>[0-9]+)/add/$', views.manday_add, name='manday_add'),
-    url(r'^(?P<manday_id>[0-9]+)/delete/$', views.manday_delete, name='manday_delete'),
+    url(r'^(?P<person_id>[0-9]+)/hours/add/$', views.add_hours, name='add_hours'),
+    url(r'^(?P<manday_id>[0-9]+)/hours/delete/$', views.delete_hours, name='delete_hours'),
+    url(r'^(?P<person_id>[0-9]+)/project/add/$', views.add_project_from_person, name='add_project_from_person'),
 ]
