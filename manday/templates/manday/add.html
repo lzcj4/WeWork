@@ -1,0 +1,59 @@
+{% extends "manday/base.html" %}
+{% block header %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "manday/css/div_style.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/base.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
+
+    <script type="text/javascript" src="{% static "manday/js/get_func.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/vendor/jquery/jquery.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/jquery.init.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/core.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/calendar.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/admin/DateTimeShortcuts.js" %}"></script>
+
+{% endblock header %}
+
+{% block content %}
+    <div style="margin-left: 50px">
+        <div style="background: #79aec8;margin-bottom: 20px">
+            <label style="color: #fff;font-size: 20px">加入新时间记录</label>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="div_input">
+                <label>项目名：</label>
+                <select name="project_id">
+                    <option selected>- - - - - - - -</option>
+                    {% for p in projects %}
+                        <option value={{ p.id }}>{{ p }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="div_input">
+                <label>时长：</label>
+                <input type="number" name="hours" value="8" style="color: red; "/>
+                <label>小时</label>
+            </div>
+
+            <div class="div_input">
+                <label>工作日：</label>
+                <input name="p_work_date" type="text" class="vDateField" size="10" required="" id="p_work_date">
+            </div>
+
+            <div>
+                <label>录入日期：</label>
+                <input name="p_input_date" type="text" class="vDateField" size="10" required="" id="p_input_date">
+                <label style="margin-left: 20px">时间：</label>
+                <input name="p_input_time" type="text" class="vTimeField" size="10" required="" id="p_input_time">
+            </div>
+            <div>
+                <input type="submit" value="保存"/>
+            </div>
+
+        </form>
+
+    </div>
+{% endblock content %}

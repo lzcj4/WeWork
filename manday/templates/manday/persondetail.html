@@ -1,0 +1,34 @@
+{% block header %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "manday/css/div_style.css" %}"/>
+
+{% endblock header %}
+
+<table border="1">
+    <tr class="table_header">
+        <th> 序号</th>
+        <th> 姓名</th>
+        <th> 项目</th>
+        <th> 时长</th>
+        <th> 工作日</th>
+        <th> 录入时间</th>
+        <th> 操作</th>
+    </tr>
+
+    {% if recorder_list %}
+        {% for item in recorder_list %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ item.person.p_name }}</td>
+                <td>{{ item.project.p_name }}</td>
+                <td>{{ item.p_hours }}</td>
+                <td>{{ item.p_work_date|get_local_date }}</td>
+                <td>{{ item.p_add_time|get_local_datetime }}</td>
+                <td><a href="{% url 'manday:manday_delete' item.id %}">删除</a></td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+
+</table>
+
+

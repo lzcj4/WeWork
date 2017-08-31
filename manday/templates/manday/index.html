@@ -1,0 +1,71 @@
+{% extends "manday/base.html" %}
+{% block header %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "manday/css/div_style.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/base.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
+
+    <script type="text/javascript" src="{% static "manday/js/get_func.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/vendor/jquery/jquery.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/jquery.init.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/core.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/calendar.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/admin/DateTimeShortcuts.js" %}"></script>
+
+{% endblock header %}
+
+{% block title %}
+    {% autoescape on %}
+        {{ title }}
+    {% endautoescape %}
+{% endblock title %}
+
+
+{% block content %}
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="div_input">
+            <label>开始日期：</label>
+            <input name="start_date" id="start_date" type="text" class="vDateField" size="10"
+                   value=" {{ start_date }}"/>
+
+            <label style=" margin-left: 30px">结束日期：</label>
+            <input name="end_date" id="end_date" type="text" class="vDateField" size="10" value="{{ end_date }}"/>
+
+            <input type="submit" value="查询" style="margin-left: 30px;width: 80px;height: 30px;padding-top: 7px"/>
+        </div>
+
+    </form>
+    <table border="1" style="margin-top: 30px">
+        <tr class="table_header">
+            <th width="50"> 序号</th>
+            <th width="50"> 姓名</th>
+            {% if projects %}
+                {% for p in projects %}
+                    <th width="120">{{ p.p_name }}</th>
+                {% endfor %}
+            {% endif %}
+            <th width="80"> 总时长</th>
+            <th width="80"> 操作</th>
+        </tr>
+
+        {# 人员时间明细 #}
+        {% if persons %}
+            {% for person in persons %}
+                <tr>
+                    <td align="center">{{ forloop.counter }}</td>
+                    <td align="center"><a href="{% url 'manday:person_detail' person.id %}">{{ person.p_name }}</a></td>
+                    {% for project in projects %}
+                        {% get_item records person.p_name project.p_name as md %}
+                        <td align="center">  {{ md|floatformat:1 }}  </td>
+                    {% endfor %}
+                    <td align="right" bgcolor="#8fbc8f">{{ records|get_total:person.p_name|floatformat:1 }}</td>
+                    <td align="center"><a href="{% url 'manday:manday_add' person.id %}">新增</a></td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+
+    </table>
+
+{% endblock content %}
