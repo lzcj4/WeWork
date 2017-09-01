@@ -15,10 +15,12 @@ def index(request):
     context = {"projects": projects}
     persons = Person.objects.all()
     context["persons"] = persons
-
+    
     if request.method in ["POST"]:
-        monday = str_to_date(request.POST.get("start_date", timezone.datetime.now().date().strftime("%Y-%m-%d")))
-        next_monday = str_to_date(request.POST.get("end_date", timezone.datetime.now().date().strftime("%Y-%m-%d")))
+        monday = str_to_date(
+            request.POST.get("start_date", timezone.datetime.now().date().strftime("%Y-%m-%d")))
+        next_monday = str_to_date(
+            request.POST.get("end_date", timezone.datetime.now().date().strftime("%Y-%m-%d"))) + datetime.timedelta(1)
         context["end_date"] = get_local_date(next_monday)
     elif request.method in ["GET"]:
         today = datetime.date.today()
@@ -50,7 +52,7 @@ class PersonDetail(generic.ListView):
     context_object_name = 'recorder_list'
 
     def get_queryset(self):
-        return WorkRecord.objects.filter(person_id=self.kwargs["pk"]).order_by("p_work_date","p_add_time")
+        return WorkRecord.objects.filter(person_id=self.kwargs["pk"]).order_by("p_work_date", "p_add_time")
 
     def get_context_data(self, **kwargs):
         context = super(PersonDetail, self).get_context_data(**kwargs)
@@ -67,7 +69,7 @@ def add_hours(request, person_id):
     if request.method in ["POST"]:
         project_id = int(request.POST.get("project_id", ""))
         hours = float(request.POST.get("hours", ""))
-        work_date = str_to_date(request.POST.get("p_work_date", ""))
+        work_date = str_to_date(request.POST.get("p_work_date"))
         input_date = timezone.datetime.strptime(
             "{0} {1}".format(request.POST.get("p_input_date", timezone.datetime.now().date().strftime("%Y-%m-%d")),
                              request.POST.get("p_input_time", timezone.datetime.now().time().strftime("%H:%M:%S"))),
@@ -126,9 +128,19 @@ def get_total(dictionary, person_name):
 def get_local_date(dt):
     return dt.strftime("%Y-%m-%d")
 
+
 @register.filter
 def get_local_datetime(dt):
     return dt.strftime("%Y-%m-%d %H:%M:%S")
+
+
+@register.filter
+def get_record_color(dictionary, person_name):
+    p_dic = dictionary.get(person_name)
+    result = 'black'
+    if p_dic is None or len(p_dic) == 0:
+        result = 'red'
+    return result
 
 
 def str_to_date(date_str):

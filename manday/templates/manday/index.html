@@ -56,7 +56,8 @@
                 <tr>
                     <td align="center">{{ forloop.counter }}</td>
                     <td align="center">
-                        <a href="{% url 'manday:person_detail' person.id %}">{{ person.p_name }}</a>
+                        <a href="{% url 'manday:person_detail' person.id %}"
+                           style="color: {{ records|get_record_color:person.p_name }}">{{ person.p_name }}</a>
                     </td>
                     {% for project in projects %}
                         {% get_item records person.p_name project.p_name as md %}
