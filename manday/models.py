@@ -29,7 +29,7 @@ class WorkRecord(models.Model):
     person = models.ForeignKey(Person, verbose_name="人员")
     project = models.ForeignKey(Project, verbose_name="项目名")
     p_hours = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="时长")
-    p_work_date = models.DateField(verbose_name="工作日")
+    p_work_date = models.DateField(verbose_name="工作日期")
     p_add_time = models.DateTimeField(verbose_name="录入时间")
     p_comment = models.CharField(max_length=400, verbose_name="备注", default="")
 

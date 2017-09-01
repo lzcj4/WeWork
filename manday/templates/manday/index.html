@@ -55,7 +55,9 @@
             {% for person in persons %}
                 <tr>
                     <td align="center">{{ forloop.counter }}</td>
-                    <td align="center"><a href="{% url 'manday:person_detail' person.id %}">{{ person.p_name }}</a></td>
+                    <td align="center">
+                        <a href="{% url 'manday:person_detail' person.id %}">{{ person.p_name }}</a>
+                    </td>
                     {% for project in projects %}
                         {% get_item records person.p_name project.p_name as md %}
                         <td align="center">  {{ md|floatformat:1 }}  </td>

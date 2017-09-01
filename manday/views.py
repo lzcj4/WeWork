@@ -50,7 +50,7 @@ class PersonDetail(generic.ListView):
     context_object_name = 'recorder_list'
 
     def get_queryset(self):
-        return WorkRecord.objects.filter(person_id=self.kwargs["pk"])
+        return WorkRecord.objects.filter(person_id=self.kwargs["pk"]).order_by("p_work_date","p_add_time")
 
     def get_context_data(self, **kwargs):
         context = super(PersonDetail, self).get_context_data(**kwargs)
@@ -125,7 +125,6 @@ def get_total(dictionary, person_name):
 @register.filter
 def get_local_date(dt):
     return dt.strftime("%Y-%m-%d")
-
 
 @register.filter
 def get_local_datetime(dt):
