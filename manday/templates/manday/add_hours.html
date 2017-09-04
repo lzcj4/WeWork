@@ -31,7 +31,7 @@
                     {% endfor %}
                 </select>
                 <a class="related-widget-wrapper-link add-related" id="add_id_project"
-                   href="{% url 'manday:add_project_from_person' person_id%}"
+                   href="{% url 'manday:add_project_from_person' person_id %}"
                    title="Add another project"><img src="/static/admin/img/icon-addlink.svg" alt="Add"></a>
             </div>
 
@@ -43,14 +43,17 @@
 
             <div class="div_input">
                 <label style="min-width: 80px">工作日：</label>
-                <input name="p_work_date" type="text" class="vDateField" size="10" required="" id="p_work_date">
+                <input name="work_date" type="text" class="vDateField" size="10" required="" id="work_date">
             </div>
-
+            <div class="div_input">
+                <label style="min-width: 80px">备注：</label>
+                <textarea name="comment" size="10" id="comment"  rows="5" cols="100"></textarea>
+            </div>
             <div>
                 <label style="min-width: 80px">录入日期：</label>
-                <input name="p_input_date" type="text" class="vDateField" size="10" required="" id="p_input_date">
+                <input name="input_date" type="text" class="vDateField" size="10" required="" id="input_date">
                 <label style="margin-left: 20px">时间：</label>
-                <input name="p_input_time" type="text" class="vTimeField" size="10" required="" id="p_input_time">
+                <input name="input_time" type="text" class="vTimeField" size="10" required="" id="input_time">
             </div>
             <div>
                 <input type="submit" value="保存"/>

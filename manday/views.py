@@ -1,9 +1,14 @@
-from django.http import HttpResponse, HttpResponseRedirect
+import datetime
+import json
+
+from django.core.serializers.json import DjangoJSONEncoder
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.template.defaulttags import register
 from django.urls import reverse
 from django.views import generic
-import datetime
+from django_echarts.core import EchartsView
+from pyecharts import Bar
 
 from .models import *
 
@@ -15,7 +20,7 @@ def index(request):
     context = {"projects": projects}
     persons = Person.objects.all()
     context["persons"] = persons
-    
+
     if request.method in ["POST"]:
         monday = str_to_date(
             request.POST.get("start_date", timezone.datetime.now().date().strftime("%Y-%m-%d")))
@@ -60,23 +65,45 @@ class PersonDetail(generic.ListView):
         return context
 
 
-def person_detail(request, person_id):
-    list = WorkRecord.objects.filter(person_id=person_id)
-    return render(request, 'manday/persondetail.html', {"recorder_list": list})
+def person_chart(request, person_id):
+    person = Person.objects.filter(id=person_id).first()
+    data = None
+    if person:
+        bar = Bar("个人工时统计", "当事人:{0}".format(person.p_name))
+        wr_set = person.workrecord_set.all()
+        projects = [wr.project.p_name for wr in wr_set]
+        hours = [float(wr.p_hours) for wr in wr_set]
+
+        bar.add("项目", projects, hours)
+        options = bar._option
+        data = json.dumps(options, DjangoJSONEncoder)
+
+    return render(request, 'manday/chart.html', {"options": data})  #
+
+
+class SimpleBarView(EchartsView):
+    template_name = 'manday/chart.html'
+    context_object_name = 'options'
+
+    def get_echarts_option(self, **kwargs):
+        bar = Bar("我的第一个图表", "这里是副标题")
+        bar.add("服装", ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"], [5, 20, 36, 10, 75, 90])
+        return bar._option
 
 
 def add_hours(request, person_id):
     if request.method in ["POST"]:
         project_id = int(request.POST.get("project_id", ""))
         hours = float(request.POST.get("hours", ""))
-        work_date = str_to_date(request.POST.get("p_work_date"))
+        work_date = str_to_date(request.POST.get("work_date"))
+        comment = request.POST.get("comment")
         input_date = timezone.datetime.strptime(
-            "{0} {1}".format(request.POST.get("p_input_date", timezone.datetime.now().date().strftime("%Y-%m-%d")),
-                             request.POST.get("p_input_time", timezone.datetime.now().time().strftime("%H:%M:%S"))),
+            "{0} {1}".format(request.POST.get("input_date", timezone.datetime.now().date().strftime("%Y-%m-%d")),
+                             request.POST.get("input_time", timezone.datetime.now().time().strftime("%H:%M:%S"))),
             "%Y-%m-%d %H:%M:%S")
         person = get_object_or_404(Person, id=person_id)
         row = person.workrecord_set.create(project_id=project_id, p_hours=hours, p_work_date=work_date,
-                                           p_add_time=input_date)
+                                           p_add_time=input_date, p_comment=comment)
         return HttpResponseRedirect(reverse('manday:index'))
     else:
         projects = Project.objects.all()
