@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.views import generic
 from django_echarts.core import EchartsView
 from pyecharts import Bar
+import  pyecharts
 
 from .models import *
 
@@ -69,6 +70,7 @@ def person_chart(request, person_id):
     person = Person.objects.filter(id=person_id).first()
     data = None
     if person:
+        pyecharts.Map
         bar = Bar("个人工时统计", "当事人:{0}".format(person.p_name))
         wr_set = person.workrecord_set.all()
         projects = [wr.project.p_name for wr in wr_set]
@@ -107,7 +109,13 @@ def add_hours(request, person_id):
         return HttpResponseRedirect(reverse('manday:index'))
     else:
         projects = Project.objects.all()
-        return render(request, 'manday/add_hours.html', {"projects": projects, "person_id": person_id})
+        return render(request, 'manday/add_hours.html',
+                      {"projects": projects,
+                       "person_id": person_id,
+                       "work_date": timezone.datetime.now().date().strftime("%Y-%m-%d"),
+                       "input_date": timezone.datetime.now().date().strftime("%Y-%m-%d"),
+                       "input_time": timezone.datetime.now().time().strftime("%H:%M:%S"),
+                       })
 
 
 def delete_hours(request, manday_id):

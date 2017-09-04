@@ -43,7 +43,7 @@
 
             <div class="div_input">
                 <label style="min-width: 80px">工作日：</label>
-                <input name="work_date" type="text" class="vDateField" size="10" required="" id="work_date">
+                <input name="work_date" type="text" class="vDateField" size="10" required="" id="work_date" value="{{ work_date }}"/>
             </div>
             <div class="div_input">
                 <label style="min-width: 80px">备注：</label>
@@ -51,9 +51,9 @@
             </div>
             <div>
                 <label style="min-width: 80px">录入日期：</label>
-                <input name="input_date" type="text" class="vDateField" size="10" required="" id="input_date">
+                <input name="input_date" type="text" class="vDateField" size="10" required="" id="input_date" value="{{ input_date }}"/>
                 <label style="margin-left: 20px">时间：</label>
-                <input name="input_time" type="text" class="vTimeField" size="10" required="" id="input_time">
+                <input name="input_time" type="text" class="vTimeField" size="10" required="" id="input_time" value="{{ input_time }}"/>
             </div>
             <div>
                 <input type="submit" value="保存"/>
