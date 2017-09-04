@@ -12,6 +12,11 @@
     <script type="text/javascript" src="{% static "admin/js/calendar.js" %}"></script>
     <script type="text/javascript" src="{% static "admin/js/admin/DateTimeShortcuts.js" %}"></script>
 
+    <style>
+        th {
+            text-align: center;
+        }
+    </style>
 {% endblock header %}
 
 {% block title %}
@@ -37,6 +42,7 @@
         </div>
 
     </form>
+
     <table border="1" style="margin-top: 30px">
         <tr class="table_header">
             <th width="50"> 序号</th>
@@ -47,7 +53,7 @@
                 {% endfor %}
             {% endif %}
             <th width="80"> 总时长</th>
-            <th width="80" style="align-items: center"> 操作</th>
+            <th width="80"> 操作</th>
         </tr>
 
         {# 人员时间明细 #}
@@ -63,10 +69,12 @@
                         {% get_item records person.p_name project.p_name as md %}
                         <td align="center">  {{ md|floatformat:1 }}  </td>
                     {% endfor %}
-                    <td align="right" bgcolor="#8fbc8f">{{ records|get_total:person.p_name|floatformat:1 }}</td>
+                    <td align="center" bgcolor="#8fbc8f">
+                        {{ records|get_total:person.p_name|floatformat:1 }}
+                    </td>
                     <td align="center">
                         <a href="{% url 'manday:add_hours' person.id %}">新增</a>
-                        <a href="{% url 'manday:person_chart' person.id %}" style="margin-left: 20px">走势</a>
+                        <a href="{% url 'manday:person_chart' person.id %}" style="margin-left: 10px">走势</a>
                     </td>
                 </tr>
             {% endfor %}
