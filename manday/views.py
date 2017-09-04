@@ -24,9 +24,9 @@ def index(request):
 
     if request.method in ["POST"]:
         monday = str_to_date(
-            request.POST.get("start_date", timezone.datetime.now().date().strftime("%Y-%m-%d")))
+            request.POST.get("start_date", get_now_local_date()))
         next_monday = str_to_date(
-            request.POST.get("end_date", timezone.datetime.now().date().strftime("%Y-%m-%d"))) + datetime.timedelta(1)
+            request.POST.get("end_date", get_now_local_date())) + datetime.timedelta(1)
         context["end_date"] = get_local_date(next_monday)
     elif request.method in ["GET"]:
         today = datetime.date.today()
@@ -99,8 +99,8 @@ def add_hours(request, person_id):
         work_date = str_to_date(request.POST.get("work_date"))
         comment = request.POST.get("comment")
         input_date = timezone.datetime.strptime(
-            "{0} {1}".format(request.POST.get("input_date", timezone.datetime.now().date().strftime("%Y-%m-%d")),
-                             request.POST.get("input_time", timezone.datetime.now().time().strftime("%H:%M:%S"))),
+            "{0} {1}".format(request.POST.get("input_date", get_now_local_date()),
+                             request.POST.get("input_time", get_now_local_time())),
             "%Y-%m-%d %H:%M:%S")
         person = get_object_or_404(Person, id=person_id)
         row = person.workrecord_set.create(project_id=project_id, p_hours=hours, p_work_date=work_date,
@@ -111,9 +111,9 @@ def add_hours(request, person_id):
         return render(request, 'manday/add_hours.html',
                       {"projects": projects,
                        "person_id": person_id,
-                       "work_date": timezone.datetime.now().date().strftime("%Y-%m-%d"),
-                       "input_date": timezone.datetime.now().date().strftime("%Y-%m-%d"),
-                       "input_time": timezone.datetime.now().time().strftime("%H:%M:%S"),
+                       "work_date": get_now_local_date(),
+                       "input_date": get_now_local_date(),
+                       "input_time": get_now_local_time(),
                        })
 
 
@@ -131,8 +131,7 @@ def add_project_from_person(request, person_id):
         p = Project.objects.create(p_name=project_name, p_launch_date=add_date)
         return HttpResponseRedirect(reverse('manday:add_hours', args=(person_id,)))
     else:
-        return render(request, 'manday/add_project.html',
-                      {'launch_date': timezone.datetime.now().date().strftime("%Y-%m-%d")})
+        return render(request, 'manday/add_project.html', {'launch_date': get_now_local_date()})
 
 
 @register.simple_tag
@@ -176,6 +175,14 @@ def get_record_color(dictionary, person_name):
     if p_dic is None or len(p_dic) == 0:
         result = 'red'
     return result
+
+
+def get_now_local_date():
+    return get_local_date(timezone.datetime.now().date())
+
+
+def get_now_local_time():
+    return timezone.datetime.now().time().strftime("%H:%M:%S")
 
 
 def str_to_date(date_str):
