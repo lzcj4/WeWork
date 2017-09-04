@@ -74,7 +74,7 @@ def person_chart(request, person_id):
         bar = Bar("个人工时统计", "当事人:{0}".format(person.p_name))
         wr_set = person.workrecord_set.all()
         projects = [wr.project.p_name for wr in wr_set]
-        hours = [float(wr.p_hours) for wr in wr_set]
+        hours = [wr.p_hours for wr in wr_set]
 
         bar.add("项目", projects, hours)
         options = bar._option
@@ -128,11 +128,11 @@ def delete_hours(request, manday_id):
 def add_project_from_person(request, person_id):
     if request.method in ["POST"]:
         project_name = request.POST.get("project_name", "")
-        add_date = str_to_date(request.POST.get("add_date", ""))
+        add_date = str_to_date(request.POST.get("launch_date", ""))
         p = Project.objects.create(p_name=project_name, p_launch_date=add_date)
         return HttpResponseRedirect(reverse('manday:add_hours', args=(person_id,)))
     else:
-        return render(request, 'manday/add_project.html')
+        return render(request, 'manday/add_project.html',{'launch_date': timezone.datetime.now().date().strftime("%Y-%m-%d")})
 
 
 @register.simple_tag
