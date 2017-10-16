@@ -16,9 +16,11 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 import manday.views
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     url(r'^$', manday.views.index, name="index"),
     url(r'^manday/', include('manday.urls')),
     url(r'^admin/', admin.site.urls),
 ]
+urlpatterns += staticfiles_urlpatterns()

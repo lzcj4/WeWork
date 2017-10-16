@@ -1,5 +1,6 @@
 Django==1.11.4
 django-echarts==0.0.1
+flup==1.0.3.dev20161029
 future==0.16.0
 Jinja2==2.9.6
 jupyter-pip==0.3.1
