@@ -1,0 +1,5 @@
+Django==1.11.7
+django-echarts==0.1.3
+mysqlclient==1.3.12
+pyecharts==0.2.7
+

@@ -7,7 +7,7 @@ from django.shortcuts import render, get_object_or_404
 from django.template.defaulttags import register
 from django.urls import reverse
 from django.views import generic
-from django_echarts.core import EchartsView
+from django_echarts.views import EChartsFrontView
 from pyecharts import Bar
 import pyecharts
 
@@ -68,7 +68,7 @@ class PersonDetail(generic.ListView):
 
 def person_chart(request, person_id):
     person = Person.objects.filter(id=person_id).first()
-    data = None
+    # data = None
     if person:
         bar = pyecharts.Line("个人工时统计", "当事人:{0}".format(person.p_name))
         wr_set = person.workrecord_set.all()
@@ -77,19 +77,19 @@ def person_chart(request, person_id):
 
         bar.add("项目", projects, hours)
         options = bar._option
-        data = json.dumps(options, DjangoJSONEncoder)
-
+        # data = json.dumps(options, DjangoJSONEncoder)
+        data = json.dumps(options)
     return render(request, 'manday/chart.html', {"options": data})  #
 
 
-class SimpleBarView(EchartsView):
-    template_name = 'manday/chart.html'
-    context_object_name = 'options'
-
-    def get_echarts_option(self, **kwargs):
-        bar = Bar("我的第一个图表", "这里是副标题")
-        bar.add("服装", ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"], [5, 20, 36, 10, 75, 90])
-        return bar._option
+# class SimpleBarView(EChartsView):
+#     template_name = 'manday/chart.html'
+#     context_object_name = 'options'
+#
+#     def get_echarts_option(self, **kwargs):
+#         bar = Bar("我的第一个图表", "这里是副标题")
+#         bar.add("服装", ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"], [5, 20, 36, 10, 75, 90])
+#         return bar._option
 
 
 def add_hours(request, person_id):
